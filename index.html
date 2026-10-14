@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="MUNA: rutinas personalizadas de cuidado personal según tus necesidades y aromas favoritos.">
+<meta name="theme-color" content="#3f5b49">
+<title>MUNA | Tu cuidado, tu esencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#inicio">MUNA<span>.</span></a>
+  <button id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">☰</button>
+  <nav id="nav">
+    <a href="#productos">Productos</a>
+    <a href="#personaliza">Personaliza tu rutina</a>
+    <a href="#envios">Envíos</a>
+    <a href="#marca">Nuestra esencia</a>
+  </nav>
+  <button id="openCart" class="cart-btn" aria-label="Abrir bolsa de compras">Bolsa (<span id="count">0</span>)</button>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div>
+      <p class="eyebrow">CUIDADO PERSONAL · HECHO PARA TI</p>
+      <h1>Tu cuidado.<br><i>Tu esencia.</i></h1>
+      <p class="lead">Descubre una rutina que conecte con tus necesidades, tus preferencias y los aromas que más te gustan.</p>
+      <a class="btn" href="#personaliza">Encuentra tu rutina ↗</a>
+      <p class="note">Tu bienestar, a tu manera.</p>
+    </div>
+    <div class="art" aria-hidden="true">
+      <div class="circle"></div>
+      <div class="bottle b1"><b>MUNA</b><small>body wash</small></div>
+      <div class="bottle b2"><b>MUNA</b><small>body lotion</small></div>
+      <div class="jar"><b>MUNA</b><small>body butter</small></div>
+      <span class="art-note">Rituales<br>para ti</span>
+    </div>
+  </section>
+
+  <section class="benefits" aria-label="Cómo funciona">
+    <span>01　Personaliza tu rutina</span><span>02　Elige tus aromas</span><span>03　Cuida de ti a tu manera</span>
+  </section>
+
+  <section class="intro" id="marca">
+    <p class="eyebrow">HOLA, SOMOS MUNA</p>
+    <h2>El cuidado personal<br>no tiene una sola fórmula.</h2>
+    <p>Creemos que cada persona tiene necesidades y preferencias distintas. MUNA propone recomendaciones de combinaciones de productos para crear una rutina personal, no solo elegir un producto aislado.</p>
+  </section>
+
+  <section class="products" id="productos">
+    <div class="section-head">
+      <div><p class="eyebrow">CONOCE MUNA</p><h2>Pequeños rituales,<br>grandes momentos.</h2></div>
+      <p>Catálogo y precios referenciales creados para este proyecto académico.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filtrar productos">
+      <button class="chip active" data-filter="todos" aria-pressed="true">Todos</button>
+      <button class="chip" data-filter="limpieza" aria-pressed="false">Limpieza</button>
+      <button class="chip" data-filter="hidratacion" aria-pressed="false">Hidratación</button>
+      <button class="chip" data-filter="nutricion" aria-pressed="false">Nutrición</button>
+    </div>
+    <div class="grid">
+      <article class="card" data-cat="limpieza">
+        <div class="product-image sage"><div class="pack">MUNA<small>limpieza suave</small></div></div>
+        <div class="card-row"><h3>Gel de ducha</h3><span class="price">S/ 29.90</span></div>
+        <p>Limpieza diaria</p>
+        <button class="add" data-id="gel">Agregar a la bolsa</button>
+      </article>
+      <article class="card" data-cat="hidratacion">
+        <div class="product-image pink"><div class="pack tall">MUNA<small>hidratación</small></div></div>
+        <div class="card-row"><h3>Loción corporal</h3><span class="price">S/ 34.90</span></div>
+        <p>Hidratación diaria</p>
+        <button class="add" data-id="locion">Agregar a la bolsa</button>
+      </article>
+      <article class="card" data-cat="nutricion">
+        <div class="product-image green"><div class="pack jarpack">MUNA<small>nutrición</small></div></div>
+        <div class="card-row"><h3>Manteca corporal</h3><span class="price">S/ 39.90</span></div>
+        <p>Textura nutritiva</p>
+        <button class="add" data-id="manteca">Agregar a la bolsa</button>
+      </article>
+    </div>
+  </section>
+
+  <section class="custom" id="personaliza">
+    <div>
+      <p class="eyebrow">TU RUTINA IDEAL</p>
+      <h2>Cuéntanos de ti.<br><i>Te orientamos.</i></h2>
+      <p>Responde tres preguntas para recibir una sugerencia inicial. La recomendación es orientativa y puedes modificarla.</p>
+    </div>
+    <form id="routineForm" novalidate>
+      <label for="need">¿Qué buscas principalmente?</label>
+      <select id="need" required>
+        <option value="">Selecciona</option>
+        <option value="limpieza">Limpieza suave</option>
+        <option value="hidratación">Hidratación diaria</option>
+        <option value="nutrición">Nutrición intensiva</option>
+      </select>
+      <label for="aroma">¿Qué aromas prefieres?</label>
+      <select id="aroma" required>
+        <option value="">Selecciona</option>
+        <option value="floral">Floral y delicado</option>
+        <option value="fresco">Fresco y cítrico</option>
+        <option value="dulce">Dulce y cálido</option>
+        <option value="neutro">Suave o neutro</option>
+      </select>
+      <label for="ritual">¿Qué tipo de rutina quieres?</label>
+      <select id="ritual" required>
+        <option value="">Selecciona</option>
+        <option value="simple">Simple y rápida</option>
+        <option value="completa">Completa y relajante</option>
+      </select>
+      <p id="formError" class="form-error" role="alert" hidden>Completa las tres preguntas para recibir tu rutina.</p>
+      <button class="btn wide" type="submit">Recomendar mi rutina ↗</button>
+      <div id="result" aria-live="polite" tabindex="-1"></div>
+    </form>
+  </section>
+
+  <section class="shipping" id="envios">
+    <div>
+      <p class="eyebrow">ENVÍOS A TODO EL PERÚ</p>
+      <h2>¿Dónde recibes<br>tu pedido?</h2>
+      <p>Elige tu distrito o usa tu ubicación para ver el operador sugerido y el plazo estimado. Los plazos y costos son referenciales y se confirman por WhatsApp antes de despachar.</p>
+    </div>
+    <div class="ship-box">
+      <label for="district">Distrito o provincia</label>
+      <select id="district">
+        <option value="">Selecciona tu zona</option>
+        <optgroup label="Lima Metropolitana">
+          <option value="lima-centro">Surco, Miraflores, San Isidro, San Borja, La Molina</option>
+          <option value="lima-norte">Los Olivos, SMP, Comas, Independencia</option>
+          <option value="lima-sur">Chorrillos, Villa El Salvador, SJM</option>
+          <option value="lima-este">Ate, Santa Anita, SJL</option>
+          <option value="callao">Callao</option>
+        </optgroup>
+        <optgroup label="Provincias">
+          <option value="prov-costa">Costa (Arequipa, Trujillo, Chiclayo, Piura, Ica)</option>
+          <option value="prov-sierra">Sierra (Cusco, Huancayo, Cajamarca, Puno)</option>
+          <option value="prov-selva">Selva (Iquitos, Pucallpa, Tarapoto)</option>
+        </optgroup>
+        <optgroup label="Internacional">
+          <option value="intl">Fuera del Perú</option>
+        </optgroup>
+      </select>
+      <button id="geoBtn" class="btn ghost wide" type="button">📍 Usar mi ubicación</button>
+      <div id="shipResult" class="ship-result" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="values">
+    <p class="eyebrow">EL UNIVERSO MUNA</p>
+    <h2>Tu bienestar, sin complicarlo.</h2>
+    <div class="value-grid">
+      <article><span>✳</span><h3>Personalización</h3><p>Recomendaciones según necesidades y preferencias.</p></article>
+      <article><span>❋</span><h3>Rutinas completas</h3><p>Combina productos para crear un ritual propio.</p></article>
+      <article><span>♡</span><h3>Compra sencilla</h3><p>Una experiencia clara, pensada para celular.</p></article>
+    </div>
+  </section>
+
+  <section class="share" id="comparte">
+    <div>
+      <p class="eyebrow">LLEVA MUNA CONTIGO</p>
+      <h2>Escanea y arma<br>tu rutina.</h2>
+      <p>Este código QR lleva directo al recomendador de rutinas. Lo usamos en volantes, empaques y publicaciones de redes sociales.</p>
+      <p class="pay-note">Medios de pago propuestos: <b>Yape · Plin · Visa · Culqi</b> (se confirman al coordinar el pedido).</p>
+    </div>
+    <figure class="qr-box">
+      <img id="qrImg" width="200" height="200" alt="Código QR que abre el recomendador de rutinas de MUNA">
+      <figcaption id="qrUrl"></figcaption>
+    </figure>
+  </section>
+</main>
+
+<footer>
+  <a class="logo" href="#inicio">MUNA<span>.</span></a>
+  <p>Tu cuidado, tu esencia.</p>
+  <small>Proyecto académico · Productos y precios referenciales · © <span id="year"></span> MUNA</small>
+</footer>
+
+<a id="waFloat" class="wa-float" href="#" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3C9 3 3.3 8.6 3.3 15.6c0 2.3.6 4.5 1.8 6.4L3 29l7.2-1.9c1.8 1 3.8 1.5 5.8 1.5 7 0 12.7-5.6 12.7-12.6S23 3 16 3zm0 23.1c-1.9 0-3.7-.5-5.3-1.4l-.4-.2-4.3 1.1 1.1-4.1-.3-.4a10.4 10.4 0 0 1-1.6-5.5C5.2 9.8 10 5.1 16 5.1s10.8 4.7 10.8 10.5S21.9 26.1 16 26.1zm5.9-7.8c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.7 1.2 3.1 1.4 3.3 2.3 3.6 5.6 5c2.1.9 2.9 1 4 .8.6-.1 1.9-.8 2.2-1.5s.3-1.4.2-1.5-.3-.2-.6-.3z"/></svg>
+  <span>¿Dudas? Escríbenos</span>
+</a>
+
+<div id="overlay" class="overlay" hidden>
+  <aside class="panel" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+    <div class="panel-head"><h2 id="cartTitle">Tu bolsa</h2><button id="closeCart" class="icon-btn" aria-label="Cerrar bolsa">×</button></div>
+    <div id="items" class="items">Tu bolsa está vacía.</div>
+    <label class="pay-label" for="payMethod">¿Cómo prefieres pagar?</label>
+    <select id="payMethod">
+      <option value="Yape">Yape</option>
+      <option value="Plin">Plin</option>
+      <option value="Tarjeta Visa">Tarjeta Visa</option>
+      <option value="Culqi (link de pago)">Culqi (link de pago)</option>
+    </select>
+    <p class="ship-line">Envío: <span id="shipSummary">elige tu zona en la sección Envíos</span></p>
+    <p class="total">Total productos <b id="total">S/ 0.00</b></p>
+    <button id="checkout" class="btn wide">Preparar pedido por WhatsApp ↗</button>
+    <small>Prepara un mensaje con tu pedido; esta web no procesa pagos reales.</small>
+  </aside>
+</div>
+
+<div id="toast" class="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
