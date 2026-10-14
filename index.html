@@ -62,59 +62,28 @@
       <button class="chip" data-filter="limpieza" aria-pressed="false">Limpieza</button>
       <button class="chip" data-filter="hidratacion" aria-pressed="false">Hidratación</button>
       <button class="chip" data-filter="nutricion" aria-pressed="false">Nutrición</button>
+      <button class="chip" data-filter="cabello" aria-pressed="false">Cabello</button>
     </div>
-    <div class="grid">
-      <article class="card" data-cat="limpieza">
-        <div class="product-image sage"><div class="pack">MUNA<small>limpieza suave</small></div></div>
-        <div class="card-row"><h3>Gel de ducha</h3><span class="price">S/ 29.90</span></div>
-        <p>Limpieza diaria</p>
-        <button class="add" data-id="gel">Agregar a la bolsa</button>
-      </article>
-      <article class="card" data-cat="hidratacion">
-        <div class="product-image pink"><div class="pack tall">MUNA<small>hidratación</small></div></div>
-        <div class="card-row"><h3>Loción corporal</h3><span class="price">S/ 34.90</span></div>
-        <p>Hidratación diaria</p>
-        <button class="add" data-id="locion">Agregar a la bolsa</button>
-      </article>
-      <article class="card" data-cat="nutricion">
-        <div class="product-image green"><div class="pack jarpack">MUNA<small>nutrición</small></div></div>
-        <div class="card-row"><h3>Manteca corporal</h3><span class="price">S/ 39.90</span></div>
-        <p>Textura nutritiva</p>
-        <button class="add" data-id="manteca">Agregar a la bolsa</button>
-      </article>
-    </div>
+    <!-- Las tarjetas se generan con JavaScript desde la lista de productos (catálogo dinámico) -->
+    <div class="grid" id="productGrid"></div>
   </section>
 
   <section class="custom" id="personaliza">
     <div>
       <p class="eyebrow">TU RUTINA IDEAL</p>
       <h2>Cuéntanos de ti.<br><i>Te orientamos.</i></h2>
-      <p>Responde tres preguntas para recibir una sugerencia inicial. La recomendación es orientativa y puedes modificarla.</p>
+      <p>Responde 8 preguntas rápidas sobre tu piel, tu cabello, tus aromas y tu tiempo. Te armamos una rutina paso a paso y te explicamos por qué elegimos cada producto.</p>
+      <p class="quiz-note">Recomendación orientativa · No reemplaza la consulta con un dermatólogo.</p>
     </div>
-    <form id="routineForm" novalidate>
-      <label for="need">¿Qué buscas principalmente?</label>
-      <select id="need" required>
-        <option value="">Selecciona</option>
-        <option value="limpieza">Limpieza suave</option>
-        <option value="hidratación">Hidratación diaria</option>
-        <option value="nutrición">Nutrición intensiva</option>
-      </select>
-      <label for="aroma">¿Qué aromas prefieres?</label>
-      <select id="aroma" required>
-        <option value="">Selecciona</option>
-        <option value="floral">Floral y delicado</option>
-        <option value="fresco">Fresco y cítrico</option>
-        <option value="dulce">Dulce y cálido</option>
-        <option value="neutro">Suave o neutro</option>
-      </select>
-      <label for="ritual">¿Qué tipo de rutina quieres?</label>
-      <select id="ritual" required>
-        <option value="">Selecciona</option>
-        <option value="simple">Simple y rápida</option>
-        <option value="completa">Completa y relajante</option>
-      </select>
-      <p id="formError" class="form-error" role="alert" hidden>Completa las tres preguntas para recibir tu rutina.</p>
-      <button class="btn wide" type="submit">Recomendar mi rutina ↗</button>
+    <form id="quiz" class="quiz" novalidate>
+      <div class="quiz-progress" aria-hidden="true"><span id="quizBar"></span></div>
+      <p id="quizCount" class="quiz-count" aria-live="polite"></p>
+      <div id="quizSteps"></div>
+      <p id="quizError" class="form-error" role="alert" hidden>Elige una opción para continuar.</p>
+      <div class="quiz-nav">
+        <button type="button" id="quizPrev" class="btn ghost">← Anterior</button>
+        <button type="button" id="quizNext" class="btn">Siguiente →</button>
+      </div>
       <div id="result" aria-live="polite" tabindex="-1"></div>
     </form>
   </section>

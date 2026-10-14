@@ -1,7 +1,8 @@
 # MUNA — tienda digital (PA2 Diseño de Negocios Digitales)
 
-Sitio demostrativo de cuidado personal: catálogo con filtros, carrito con cantidades, recomendador de rutinas,
-consulta de envíos por distrito o ubicación, botón flotante de WhatsApp y código QR hacia el recomendador.
+Sitio demostrativo de cuidado personal: catálogo dinámico de 7 productos con filtros, carrito con cantidades,
+test de rutina de 8 preguntas paso a paso, consulta de envíos por distrito o ubicación, botón flotante de WhatsApp
+y código QR hacia el test.
 
 ## Archivos
 - `index.html` — estructura semántica (header, nav, main, section, footer)
@@ -14,9 +15,9 @@ consulta de envíos por distrito o ubicación, botón flotante de WhatsApp y có
 3. Abre **Settings → Pages** → **Deploy from a branch** → rama `main`, carpeta `/ (root)` → **Save**.
 4. Espera 1–3 minutos y abre la URL que muestra GitHub (ej. `https://USUARIO.github.io/MUNA/`).
 
-## Configurar WhatsApp
-En la primera línea de `script.js`, escribe el número en `WHATSAPP_NUMBER` con código de país (ej. `'51987654321'`).
-Si se deja vacío, WhatsApp se abre y el usuario elige el contacto (modo demostrativo).
+## WhatsApp
+Todos los botones abren el WhatsApp de MUNA (940 999 440). Para cambiarlo, edita `WHATSAPP_NUMBER` al inicio de `script.js`
+(código de país 51 + número, sin espacios).
 
 ## Alcance y límites
 - Productos, precios, plazos y costos de envío son referenciales (proyecto académico).

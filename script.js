@@ -1,12 +1,16 @@
 // ===== Configuración =====
-// Escribe aquí el número de WhatsApp Business de MUNA con código de país, sin + ni espacios (ej. '51987654321').
-// Si queda vacío, WhatsApp se abre y el usuario elige a quién enviar el mensaje (modo demostrativo).
-const WHATSAPP_NUMBER = '';
+// Número de WhatsApp de MUNA con código de país (51 = Perú), sin + ni espacios.
+const WHATSAPP_NUMBER = '51940999440';
 
+// ===== Catálogo (precios referenciales del proyecto académico) =====
 const products = {
-  gel:     { name: 'Gel de ducha',     price: 29.90 },
-  locion:  { name: 'Loción corporal',  price: 34.90 },
-  manteca: { name: 'Manteca corporal', price: 39.90 }
+  gel:            { name: 'Gel de ducha',     desc: 'Limpieza suave diaria',            cat: 'limpieza',    price: 29.90, bg: 'sage',  pack: '',          label: 'limpieza suave' },
+  jabon:          { name: 'Jabón en barra',   desc: 'Limpieza natural, sin plástico',   cat: 'limpieza',    price: 19.90, bg: 'sand',  pack: 'bar',       label: 'jabón natural' },
+  locion:         { name: 'Loción corporal',  desc: 'Hidratación ligera diaria',        cat: 'hidratacion', price: 34.90, bg: 'pink',  pack: 'tall',      label: 'hidratación' },
+  aceite:         { name: 'Aceite corporal',  desc: 'Hidratación intensa y brillo',     cat: 'nutricion',   price: 44.90, bg: 'peach', pack: 'oil',       label: 'aceite' },
+  manteca:        { name: 'Manteca corporal', desc: 'Nutrición profunda',               cat: 'nutricion',   price: 39.90, bg: 'green', pack: 'jarpack',   label: 'nutrición' },
+  shampoo:        { name: 'Shampoo',          desc: 'Limpieza para tu tipo de cabello', cat: 'cabello',     price: 32.90, bg: 'mist',  pack: 'hair',      label: 'shampoo' },
+  acondicionador: { name: 'Acondicionador',   desc: 'Suavidad y desenredo',             cat: 'cabello',     price: 32.90, bg: 'lilac', pack: 'hair cond', label: 'acondicionador' }
 };
 
 // Plazos y operadores referenciales por zona (Sección 3 del documento: Shalom + DHL)
@@ -71,11 +75,23 @@ $('items').addEventListener('click', e => {
 
 function addToCart(id) { cart[id] = (cart[id] || 0) + 1; }
 
-document.querySelectorAll('.add').forEach(b => b.addEventListener('click', () => {
+// ===== Catálogo dinámico =====
+function renderCatalog() {
+  $('productGrid').innerHTML = Object.entries(products).map(([id, p]) => `
+    <article class="card" data-cat="${p.cat}">
+      <div class="product-image ${p.bg}"><div class="pack ${p.pack}">MUNA<small>${p.label}</small></div></div>
+      <div class="card-row"><h3>${p.name}</h3><span class="price">${money(p.price)}</span></div>
+      <p>${p.desc}</p>
+      <button class="add" data-id="${id}">Agregar a la bolsa</button>
+    </article>`).join('');
+}
+$('productGrid').addEventListener('click', e => {
+  const b = e.target.closest('.add');
+  if (!b) return;
   addToCart(b.dataset.id);
   renderCart();
-  toast('Producto agregado a tu bolsa');
-}));
+  toast(products[b.dataset.id].name + ' agregado a tu bolsa');
+});
 
 function openCart() { $('overlay').hidden = false; document.body.classList.add('no-scroll'); $('closeCart').focus(); }
 function closeCart() { $('overlay').hidden = true; document.body.classList.remove('no-scroll'); $('openCart').focus(); }
@@ -115,36 +131,185 @@ document.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click'
   document.querySelectorAll('.card').forEach(card => card.classList.toggle('hide', f !== 'todos' && card.dataset.cat !== f));
 }));
 
-// ===== Recomendador de rutina =====
-$('routineForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const fields = ['need', 'aroma', 'ritual'];
-  let ok = true;
-  fields.forEach(id => { const empty = !$(id).value; $(id).classList.toggle('invalid', empty); if (empty) ok = false; });
-  $('formError').hidden = ok;
-  if (!ok) { $(fields.find(id => !$(id).value)).focus(); return; }
+// ===== Cuestionario de rutina (8 preguntas, paso a paso) =====
+const questions = [
+  { id: 'piel', q: '¿Cómo sientes tu piel la mayor parte del tiempo?', opts: [
+    ['seca', 'Seca o tirante'], ['normal', 'Normal, sin molestias'], ['grasa', 'Grasa o con brillo'], ['sensible', 'Sensible, se irrita fácilmente']] },
+  { id: 'meta', q: '¿Qué te gustaría lograr principalmente?', opts: [
+    ['limpieza', 'Sentirme limpia y fresca'], ['hidratacion', 'Mantener mi piel hidratada'], ['nutricion', 'Suavidad y nutrición profunda'], ['relajo', 'Relajarme y tener un momento para mí']] },
+  { id: 'cabello', q: '¿Cómo describirías tu cabello?', opts: [
+    ['seco', 'Seco, maltratado o teñido'], ['graso', 'Graso, se ensucia rápido'], ['normal', 'Normal'], ['rizado', 'Rizado u ondulado'], ['no', 'No busco productos para el cabello']] },
+  { id: 'aroma', q: '¿Qué aromas prefieres?', opts: [
+    ['floral', 'Floral y delicado'], ['fresco', 'Fresco y cítrico'], ['dulce', 'Dulce y cálido'], ['neutro', 'Suave o sin aroma']] },
+  { id: 'textura', q: '¿Qué textura disfrutas más en la piel?', opts: [
+    ['ligera', 'Ligera, que se absorba rápido'], ['cremosa', 'Cremosa y envolvente'], ['oleosa', 'Oleosa, tipo aceite']] },
+  { id: 'tiempo', q: '¿Cuánto tiempo le dedicas a tu rutina?', opts: [
+    ['rapida', '5 minutos, algo rápido'], ['media', 'Entre 10 y 15 minutos'], ['ritual', 'Me encanta un ritual completo']] },
+  { id: 'eco', q: '¿Prefieres opciones con menos plástico?', opts: [
+    ['si', 'Sí, prefiero opciones eco (en barra)'], ['igual', 'Me da igual, prefiero lo práctico']] },
+  { id: 'presupuesto', q: '¿Cuál es tu presupuesto aproximado?', opts: [
+    ['60', 'Hasta S/ 60'], ['120', 'Entre S/ 60 y S/ 120'], ['999', 'Más de S/ 120']] }
+];
+const answers = {};
+let quizStep = 0;
 
-  const need = $('need').value, aroma = $('aroma').value, ritual = $('ritual').value;
-  const map = { 'limpieza': 'gel', 'hidratación': 'locion', 'nutrición': 'manteca' };
-  let ids = [map[need]];
-  if (ritual === 'completa') ids = ids.concat(Object.keys(products).filter(id => !ids.includes(id)));
+function renderQuiz() {
+  $('quizSteps').innerHTML = questions.map((qq, i) => `
+    <fieldset class="quiz-step" data-step="${i}" ${i ? 'hidden' : ''}>
+      <legend>${qq.q}</legend>
+      ${qq.opts.map(([v, t]) => `
+        <label class="opt"><input type="radio" name="${qq.id}" value="${v}"><span>${t}</span></label>`).join('')}
+    </fieldset>`).join('');
+  showStep(0);
+}
 
-  $('result').innerHTML = `<h3>Tu rutina sugerida</h3>
-    <p>Según tu interés en <b>${need}</b>, tu preferencia de aroma <b>${aroma}</b> y una rutina ${ritual === 'simple' ? 'simple' : 'completa'}, te sugerimos:</p>
-    <ul>${ids.map(id => `<li>${products[id].name} · ${money(products[id].price)}</li>`).join('')}</ul>
-    <p>Esta sugerencia es orientativa. Los aromas son preferencias conceptuales del proyecto.</p>
-    <button type="button" class="btn" id="addRoutine">Agregar rutina a la bolsa</button>`;
-  // En celular el resultado aparece debajo del botón: lo llevamos a la vista
-  $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  $('result').focus({ preventScroll: true });
+function showStep(i) {
+  quizStep = i;
+  document.querySelectorAll('.quiz-step').forEach(f => { f.hidden = Number(f.dataset.step) !== i; });
+  $('quizCount').textContent = `Pregunta ${i + 1} de ${questions.length}`;
+  $('quizBar').style.width = `${((i + 1) / questions.length) * 100}%`;
+  $('quizPrev').style.visibility = i === 0 ? 'hidden' : 'visible';
+  $('quizNext').textContent = i === questions.length - 1 ? 'Ver mi rutina ✓' : 'Siguiente →';
+  $('quizError').hidden = true;
+}
+
+function nextStep() {
+  const qq = questions[quizStep];
+  if (!answers[qq.id]) { $('quizError').hidden = false; return; }
+  if (quizStep < questions.length - 1) showStep(quizStep + 1);
+  else showResult();
+}
+
+$('quizSteps').addEventListener('change', e => {
+  if (e.target.type !== 'radio') return;
+  answers[e.target.name] = e.target.value;
+  $('quizError').hidden = true;
+  // En celular avanzamos solos para que sea más rápido (menos toques)
+  if (quizStep < questions.length - 1) setTimeout(nextStep, 250);
+});
+$('quizNext').addEventListener('click', nextStep);
+$('quizPrev').addEventListener('click', () => { if (quizStep > 0) showStep(quizStep - 1); });
+
+// Lógica de recomendación: elige productos según el perfil y explica el porqué
+function recommend(a) {
+  const picks = [];
+  const add = (id, step, order, prio, reason) => picks.push({ id, step, order, prio, reason });
+
+  // 1. Limpieza corporal
+  if (a.eco === 'si') add('jabon', 'Limpieza corporal', 1, 1, 'Prefieres opciones sin envase plástico, y limpia sin resecar.');
+  else add('gel', 'Limpieza corporal', 1, 1, {
+    grasa: 'Su textura fresca ayuda a retirar el exceso de grasa.',
+    sensible: 'Limpieza suave, pensada para no irritar la piel sensible.',
+    seca: 'Limpia con suavidad sin dejar la piel tirante.'
+  }[a.piel] || 'Limpieza diaria suave y práctica.');
+
+  // 2. Hidratación o nutrición principal
+  let main;
+  if (a.textura === 'oleosa' || a.meta === 'relajo') {
+    main = 'aceite';
+    add('aceite', 'Hidratación', 4, 2, a.meta === 'relajo' ? 'Ideal para un masaje relajante después de la ducha.' : 'Te gusta la textura oleosa y deja la piel con brillo natural.');
+  } else if (a.piel === 'seca' || a.meta === 'nutricion' || (a.textura === 'cremosa' && a.piel !== 'grasa')) {
+    main = 'manteca';
+    add('manteca', 'Nutrición', 4, 2, a.piel === 'seca' ? 'Tu piel es seca: la manteca nutre en profundidad y calma la tirantez.' : 'Textura cremosa que deja la piel suave por más tiempo.');
+  } else {
+    main = 'locion';
+    add('locion', 'Hidratación', 4, 2, {
+      grasa: 'Hidrata sin sensación pesada ni brillo extra.',
+      sensible: 'Hidratación ligera y sencilla para piel sensible.'
+    }[a.piel] || 'Hidratación ligera que se absorbe rápido.');
+  }
+
+  // 3. Cabello
+  if (a.cabello !== 'no') {
+    add('shampoo', 'Lavado del cabello', 2, 3, {
+      seco: 'Limpia con suavidad sin quitar la humedad del cabello.',
+      graso: 'Ayuda a controlar el exceso de grasa en la raíz.',
+      rizado: 'Limpia sin quitar la definición de tus rizos.',
+      normal: 'Limpieza equilibrada para uso frecuente.'
+    }[a.cabello]);
+    if (!(a.cabello === 'graso' && a.tiempo === 'rapida')) {
+      add('acondicionador', 'Acondicionado', 3, 4, {
+        seco: 'Aporta suavidad y ayuda a reparar las puntas.',
+        graso: 'Aplícalo solo de medios a puntas para no engrasar la raíz.',
+        rizado: 'Ayuda a definir y controlar el frizz.',
+        normal: 'Desenreda y deja el cabello suave.'
+      }[a.cabello]);
+    }
+  }
+
+  // 4. Paso extra si tiene más tiempo
+  if (a.tiempo === 'ritual' || (a.tiempo === 'media' && a.piel === 'seca')) {
+    const extra = main === 'aceite' ? 'manteca' : 'aceite';
+    add(extra, 'Paso extra (noche)', 5, 5, 'Para tu ritual: aplícalo por la noche y potencia la hidratación mientras descansas.');
+  }
+
+  // 5. Ajuste al presupuesto (se quitan primero los pasos menos importantes)
+  const limit = Number(a.presupuesto);
+  // Con presupuesto ajustado, el jabón en barra rinde más y deja espacio para hidratar
+  if (limit <= 60 && picks[0].id === 'gel') {
+    picks[0].id = 'jabon';
+    picks[0].reason = 'Opción rendidora y económica para tu presupuesto; limpia sin resecar.';
+  }
+  let sum = 0;
+  const kept = [], left = [];
+  picks.sort((x, y) => x.prio - y.prio).forEach(p => {
+    const price = products[p.id].price;
+    if (p.prio === 1 || sum + price <= limit) { kept.push(p); sum += price; } else left.push(p);
+  });
+  kept.sort((x, y) => x.order - y.order);
+  return { kept, left, total: sum };
+}
+
+function showResult() {
+  const a = answers;
+  const { kept, left, total } = recommend(a);
+  const label = (qid, v) => questions.find(q => q.id === qid).opts.find(o => o[0] === v)[1].toLowerCase();
+  const perfil = { limpieza: 'Frescura diaria', hidratacion: 'Hidratación equilibrada', nutricion: 'Nutrición profunda', relajo: 'Momento de calma' }[a.meta];
+  const aromaTxt = a.piel === 'sensible' && a.aroma !== 'neutro'
+    ? 'Por tu piel sensible te sugerimos las versiones suaves o sin aroma.'
+    : `Te sugerimos las versiones con aroma <b>${label('aroma', a.aroma)}</b>.`;
+
+  $('quizSteps').hidden = true;
+  document.querySelector('.quiz-nav').hidden = true;
+  document.querySelector('.quiz-progress').hidden = true;
+  $('quizCount').hidden = true;
+
+  $('result').innerHTML = `
+    <p class="eyebrow">TU PERFIL MUNA</p>
+    <h3>Rutina “${perfil}”</h3>
+    <p class="profile-tags"><span>Piel ${label('piel', a.piel).split(',')[0]}</span>${a.cabello !== 'no' ? `<span>Cabello ${label('cabello', a.cabello).split(',')[0]}</span>` : ''}<span>${label('tiempo', a.tiempo)}</span></p>
+    <ol class="routine">
+      ${kept.map((p, i) => `<li><span class="step-n">${i + 1}</span><div><small>${p.step}</small><b>${products[p.id].name}</b> · ${money(products[p.id].price)}<p>${p.reason}</p></div></li>`).join('')}
+    </ol>
+    <p>${aromaTxt}</p>
+    ${left.length ? `<p class="budget-note">Para respetar tu presupuesto dejamos fuera: ${left.map(p => products[p.id].name).join(', ')}. Puedes agregarlo cuando quieras.</p>` : ''}
+    <p class="routine-total">Total de tu rutina: <b>${money(total)}</b></p>
+    <button type="button" class="btn wide" id="addRoutine">Agregar rutina a la bolsa</button>
+    <a class="btn ghost wide" id="askRoutine" target="_blank" rel="noopener">Consultar esta rutina por WhatsApp</a>
+    <button type="button" class="link-btn" id="restartQuiz">Volver a responder</button>
+    <p class="quiz-note">Recomendación orientativa del proyecto. Si tienes alguna condición de la piel, consulta con un dermatólogo.</p>`;
+
+  $('askRoutine').href = waLink(`Hola, MUNA. Hice el test y me salió la rutina "${perfil}": ${kept.map(p => products[p.id].name).join(', ')} (total ${money(total)}). ¿Me ayudan con mi pedido?`);
   $('addRoutine').addEventListener('click', () => {
-    ids.forEach(addToCart);
+    kept.forEach(p => addToCart(p.id));
     renderCart();
     toast('Rutina agregada a tu bolsa');
     openCart();
   });
-});
-['need', 'aroma', 'ritual'].forEach(id => $(id).addEventListener('change', () => $(id).classList.remove('invalid')));
+  $('restartQuiz').addEventListener('click', () => {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    $('result').innerHTML = '';
+    $('quizSteps').hidden = false;
+    document.querySelector('.quiz-nav').hidden = false;
+    document.querySelector('.quiz-progress').hidden = false;
+    $('quizCount').hidden = false;
+    renderQuiz();
+    $('personaliza').scrollIntoView({ behavior: 'smooth' });
+  });
+  // En celular llevamos la vista al resultado
+  $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('result').focus({ preventScroll: true });
+}
 
 // ===== Envíos: selección de zona y geolocalización =====
 function showShipping(key, viaGeo) {
@@ -203,4 +368,6 @@ $('waFloat').href = waLink('Hola, MUNA. Quisiera consultar sobre sus productos y
 })();
 
 $('year').textContent = new Date().getFullYear();
+renderCatalog();
+renderQuiz();
 renderCart();
