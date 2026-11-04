@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="muna-commerce.css">
 </head>
 <body>
 <header class="top">
@@ -88,15 +89,23 @@
     </form>
   </section>
 
-  <section class="shipping" id="envios">
-    <div>
-      <p class="eyebrow">ENVÍOS A TODO EL PERÚ</p>
-      <h2>¿Dónde recibes<br>tu pedido?</h2>
-      <p>Elige tu distrito o usa tu ubicación para ver el operador sugerido y el plazo estimado. Los plazos y costos son referenciales y se confirman por WhatsApp antes de despachar.</p>
+  <section class="shipping muna-shipping" id="envios">
+    <div class="md-heading">
+      <p class="eyebrow">ENTREGAS MUNA · DE LIMA AL MUNDO</p>
+      <h2>Tu ritual favorito,<br><i>hasta tu puerta.</i></h2>
+      <p>Conoce las opciones de envío, completa tus datos con calma y realiza el pedido desde nuestra propia tienda. Los costos y plazos se confirman antes del despacho.</p>
+      <span class="md-heading-tag">✦ Cuidado personal, de principio a fin</span>
     </div>
-    <div class="ship-box">
-      <label for="district">Distrito o provincia</label>
-      <select id="district">
+    <div class="md-steps" aria-label="Proceso de compra">
+      <div class="md-step"><span>01</span><div><strong>Elige tu zona</strong><small>Consulta cobertura y tiempos.</small></div></div>
+      <div class="md-step"><span>02</span><div><strong>Indica tu dirección</strong><small>Agrega referencias útiles.</small></div></div>
+      <div class="md-step"><span>03</span><div><strong>Finaliza tu pedido</strong><small>Revisa el carrito aquí mismo.</small></div></div>
+    </div>
+    <div class="md-layout">
+      <div class="ship-box md-form-card">
+        <div class="md-card-title"><span class="md-card-icon" aria-hidden="true">⌂</span><div><h3>Datos para tu entrega</h3><p>Cuéntanos dónde te gustaría recibir MUNA.</p></div></div>
+        <div class="md-field"><label for="district">Distrito o provincia <span aria-hidden="true">*</span></label>
+        <select id="district">
         <option value="">Selecciona tu zona</option>
         <optgroup label="Lima Metropolitana">
           <option value="lima-centro">Surco, Miraflores, San Isidro, San Borja, La Molina</option>
@@ -114,8 +123,27 @@
           <option value="intl">Fuera del Perú</option>
         </optgroup>
       </select>
-      <button id="geoBtn" class="btn ghost wide" type="button">📍 Usar mi ubicación</button>
-      <div id="shipResult" class="ship-result" aria-live="polite"></div>
+        </div>
+        <button id="geoBtn" class="btn ghost md-location" type="button">⌖ Usar mi ubicación aproximada</button>
+        <div class="md-field"><label for="deliveryAddress">Dirección de entrega <span aria-hidden="true">*</span></label>
+          <input id="deliveryAddress" name="address" maxlength="180" autocomplete="street-address" placeholder="Ej. Av. Principal 123, urbanización…" />
+          <small>Incluye avenida o calle y número. La dirección exacta no se obtiene automáticamente.</small></div>
+        <div class="md-field-row">
+          <div class="md-field"><label for="deliveryReference">Referencia</label><input id="deliveryReference" maxlength="140" placeholder="Frente a un parque, portón verde…" /></div>
+          <div class="md-field"><label for="deliveryApartment">Dpto. / interior</label><input id="deliveryApartment" maxlength="45" placeholder="Torre B, piso 3…" /></div>
+        </div>
+        <div id="shipResult" class="ship-result" aria-live="polite"></div>
+        <button id="deliveryToCart" type="button" class="btn md-primary">Revisar mi compra <span aria-hidden="true">↗</span></button>
+        <p class="md-disclaimer">No confirmaremos un despacho ni un cobro sin validar tu pedido.</p>
+      </div>
+      <aside class="md-aside" aria-label="Información sobre tu envío">
+        <div class="md-aside-art" aria-hidden="true"><div class="md-art-circle"></div><div class="md-art-bottle"><b>MUNA.</b><small>body wash</small></div><span>HECHO PARA TI</span></div>
+        <div class="md-summary-card"><p class="eyebrow">TU ENTREGA, EN CLARO</p><h3>Antes de empezar</h3>
+          <div class="md-summary-line"><span aria-hidden="true">⌖</span><div><strong>Zona de envío</strong><p id="mdZonePreview">Selecciona tu zona para consultar cobertura.</p></div></div>
+          <div class="md-summary-line"><span aria-hidden="true">◷</span><div><strong>Plazos y costos</strong><p id="mdTimePreview">Se muestran valores referenciales y se confirman al coordinar.</p></div></div>
+          <div class="md-summary-line"><span aria-hidden="true">✓</span><div><strong>Compra sin salir de MUNA</strong><p>Agrega productos a tu bolsa y completa el checkout en esta página.</p></div></div>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -167,12 +195,52 @@
     </select>
     <p class="ship-line">Envío: <span id="shipSummary">elige tu zona en la sección Envíos</span></p>
     <p class="total">Total productos <b id="total">S/ 0.00</b></p>
-    <button id="checkout" class="btn wide">Preparar pedido por WhatsApp ↗</button>
-    <small>Prepara un mensaje con tu pedido; esta web no procesa pagos reales.</small>
+    <button id="checkout" class="btn wide">Finalizar compra en MUNA ↗</button>
+    <small>Completa tu pedido dentro de MUNA. Los pagos y envíos reales requieren confirmación.</small>
   </aside>
 </div>
 
+<div class="md-checkout-overlay" id="munaCheckout" hidden>
+  <section class="md-checkout-dialog" role="dialog" aria-modal="true" aria-labelledby="mcTitle">
+    <header class="md-checkout-header"><div><span class="eyebrow">MUNA · TU COMPRA</span><h2 id="mcTitle">Finaliza tu pedido</h2></div><button type="button" class="md-close" id="mcClose" aria-label="Cerrar checkout">×</button></header>
+    <div id="mcCheckoutContent" class="md-checkout-body">
+      <form id="munaCheckoutForm" novalidate>
+        <div class="md-checkout-grid">
+          <div class="md-checkout-form">
+            <h3>01 / Tus datos</h3><p class="md-helper">Completa la información para preparar tu pedido.</p>
+            <div class="md-field-row">
+              <div class="md-field"><label for="mcName">Nombre completo *</label><input required id="mcName" name="name" autocomplete="name" maxlength="90" placeholder="Tu nombre y apellido" /></div>
+              <div class="md-field"><label for="mcPhone">Celular *</label><input required id="mcPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="9XXXXXXXX" /></div>
+            </div>
+            <div class="md-field"><label for="mcEmail">Correo (opcional)</label><input id="mcEmail" name="email" type="email" maxlength="150" autocomplete="email" placeholder="nombre@correo.com" /></div>
+            <h3>02 / Entrega</h3>
+            <div class="md-field"><label for="mcZone">Distrito o provincia *</label><select id="mcZone" name="zone" required></select></div>
+            <div class="md-field"><label for="mcAddress">Dirección exacta *</label><input required id="mcAddress" name="address" autocomplete="street-address" maxlength="180" placeholder="Calle, número y urbanización" /></div>
+            <div class="md-field-row">
+              <div class="md-field"><label for="mcReference">Referencia</label><input id="mcReference" name="reference" maxlength="140" placeholder="Referencia para el reparto" /></div>
+              <div class="md-field"><label for="mcApartment">Dpto. / interior</label><input id="mcApartment" name="apartment" maxlength="45" placeholder="Opcional" /></div>
+            </div>
+            <h3>03 / Forma de pago</h3>
+            <div class="md-field"><label for="mcPayment">Preferencia de pago</label><select id="mcPayment" name="payment"><option value="Por coordinar">Por coordinar</option><option value="Yape (por coordinar)">Yape (por coordinar)</option><option value="Plin (por coordinar)">Plin (por coordinar)</option><option value="Tarjeta (por coordinar)">Tarjeta (por coordinar)</option></select></div>
+            <p class="md-helper">Este formulario no cobra ni solicita datos bancarios.</p>
+          </div>
+          <aside class="md-order-summary">
+            <p class="eyebrow">TU BOLSA</p><h3>Resumen del pedido</h3>
+            <div id="mcItems"></div>
+            <div class="md-total-row"><span>Productos</span><strong id="mcTotal">S/ 0.00</strong></div>
+            <div class="md-total-row"><span>Envío</span><span id="mcShipping">Se confirmará antes del despacho</span></div>
+            <p id="mcError" class="md-order-error" role="alert" hidden></p>
+            <button type="submit" class="btn md-primary" id="mcSubmit">Registrar pedido de prueba ↗</button>
+            <small id="mcModeNote">Modo demostración: el pedido no llega al negocio ni se realiza un cobro. Para ventas reales debe conectarse el servidor de pedidos.</small>
+          </aside>
+        </div>
+      </form>
+    </div>
+    <div class="md-order-success" id="mcSuccess" hidden aria-live="polite"></div>
+  </section>
+</div>
 <div id="toast" class="toast" role="status"></div>
 <script src="script.js"></script>
+<script src="muna-commerce.js"></script>
 </body>
 </html>
