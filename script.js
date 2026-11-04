@@ -103,12 +103,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('overla
 $('checkout').addEventListener('click', () => {
   const ids = Object.keys(cart);
   if (!ids.length) { toast('Agrega un producto antes de continuar'); return; }
-  const lines = ids.map(id => `${products[id].name} x ${cart[id]}`);
-  const total = ids.reduce((s, id) => s + products[id].price * cart[id], 0);
-  const z = shippingZones[selectedZone];
-  const envio = z ? ` Envío a: ${z.zone} (${z.op}).` : ' Envío: por coordinar.';
-  const msg = `Hola, MUNA. Quiero hacer este pedido: ${lines.join(', ')}. Total referencial de productos: ${money(total)}. Pago preferido: ${$('payMethod').value}.${envio}`;
-  window.open(waLink(msg), '_blank', 'noopener');
+  const items = ids.map(id => ({ id, name: products[id].name, quantity: cart[id], price: products[id].price }));
+  closeCart();
+  document.dispatchEvent(new CustomEvent('muna:open-checkout', { detail: { items, zone: selectedZone } }));
 });
 
 // ===== Menú móvil =====
